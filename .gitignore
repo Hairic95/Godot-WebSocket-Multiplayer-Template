@@ -1,5 +1,5 @@
 # Godot-specific ignores
-.import/
+import/
 export.cfg
 export_presets.cfg
 
@@ -11,5 +11,5 @@ export_presets.cfg
 data_*/
 
 # Node-specific ignores
-.dist/
-.node_modules/
+dist/
+node_modules/
