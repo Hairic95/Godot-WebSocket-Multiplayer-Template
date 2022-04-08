@@ -1,0 +1,78 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://src/scenes/NetworkBattleScene.gd" type="Script" id=1]
+[ext_resource path="res://assets/textures/battle/grounds/arena_test.png" type="Texture" id=2]
+[ext_resource path="res://src/entities/player/NetworkPlayer.tscn" type="PackedScene" id=3]
+
+[node name="NetworkScene" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="BG" type="Node2D" parent="."]
+
+[node name="arena_test" type="Sprite" parent="BG"]
+position = Vector2( 954, -33 )
+texture = ExtResource( 2 )
+
+[node name="arena_test2" type="Sprite" parent="BG"]
+position = Vector2( 139, 2 )
+texture = ExtResource( 2 )
+
+[node name="arena_test3" type="Sprite" parent="BG"]
+position = Vector2( 956.5, -1068 )
+texture = ExtResource( 2 )
+
+[node name="arena_test4" type="Sprite" parent="BG"]
+position = Vector2( 142, -1033 )
+texture = ExtResource( 2 )
+
+[node name="arena_test5" type="Sprite" parent="BG"]
+position = Vector2( -654, -33 )
+texture = ExtResource( 2 )
+
+[node name="arena_test6" type="Sprite" parent="BG"]
+position = Vector2( -1459, 2 )
+texture = ExtResource( 2 )
+
+[node name="arena_test7" type="Sprite" parent="BG"]
+position = Vector2( -651.5, -1068 )
+texture = ExtResource( 2 )
+
+[node name="arena_test8" type="Sprite" parent="BG"]
+position = Vector2( -1456, -1043 )
+texture = ExtResource( 2 )
+
+[node name="arena_test9" type="Sprite" parent="BG"]
+position = Vector2( 2588, -33 )
+texture = ExtResource( 2 )
+
+[node name="arena_test10" type="Sprite" parent="BG"]
+position = Vector2( 1773, 2 )
+texture = ExtResource( 2 )
+
+[node name="arena_test11" type="Sprite" parent="BG"]
+position = Vector2( 2590.5, -1068 )
+texture = ExtResource( 2 )
+
+[node name="arena_test12" type="Sprite" parent="BG"]
+position = Vector2( 1775.5, -1033 )
+texture = ExtResource( 2 )
+
+[node name="Entities" type="YSort" parent="."]
+
+[node name="Player" parent="Entities" instance=ExtResource( 3 )]
+
+[node name="Camera2D" type="Camera2D" parent="Entities/Player"]
+position = Vector2( 0, -50 )
+current = true
+zoom = Vector2( 1.3, 1.3 )
+
+[node name="Bullets" type="YSort" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
