@@ -20,7 +20,7 @@ var packet_time = 0
 var packet_timer = .02
 
 func _ready():
-	pass
+	$Name.text = NetworkSocket.current_username
 
 func _physics_process(delta):
 	movement_direction = Vector2.ZERO

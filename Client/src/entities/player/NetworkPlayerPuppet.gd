@@ -19,7 +19,7 @@ onready var anim = $Sprites/Anim
 
 func _ready():
 	NetworkSocket.connect("player_position_update", self, "player_position_update")
-	$Label.text = username
+	$Name.text = username
 
 func _physics_process(delta):
 	

@@ -34,16 +34,14 @@ position = Vector2( 0, -24 )
 rotation = 1.5708
 shape = SubResource( 1 )
 
-[node name="PushBox" type="Area2D" parent="." groups=[
-"pushbox",
-]]
+[node name="PushBox" type="Area2D" parent="." groups=["pushbox"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PushBox"]
 position = Vector2( 0, -24 )
 rotation = 1.5708
 shape = SubResource( 2 )
 
-[node name="Label" type="Label" parent="."]
+[node name="Name" type="Label" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -56,9 +54,6 @@ custom_fonts/font = SubResource( 3 )
 text = "Player"
 align = 1
 valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Node2D" type="Node2D" parent="."]
 

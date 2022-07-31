@@ -39,9 +39,7 @@ position = Vector2( 0, -80 )
 
 [node name="NetworkWeapon" parent="Weapon" instance=ExtResource( 3 )]
 
-[node name="PushBox" type="Area2D" parent="." groups=[
-"pushbox",
-]]
+[node name="PushBox" type="Area2D" parent="." groups=["pushbox"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PushBox"]
 position = Vector2( 0, -24 )

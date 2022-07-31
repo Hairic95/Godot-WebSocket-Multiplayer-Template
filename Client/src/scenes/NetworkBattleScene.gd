@@ -14,6 +14,7 @@ func _ready():
 	EventBus.connect("create_bullet", self, "create_bullet")
 	NetworkSocket.connect("shoot_bullet", self, "create_bullet_puppet")
 
+
 func get_own_lobby(lobby):
 	for player in lobby.players:
 		if player.id != NetworkSocket.current_web_id:
