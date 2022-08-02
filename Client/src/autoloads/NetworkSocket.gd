@@ -6,6 +6,8 @@ var web_socket_client : WebSocketClient
 
 var current_web_id = ""
 
+var lobby_data = null
+
 # Web socket signals
 signal web_socket_connected()
 signal web_socket_disconnected()
@@ -179,6 +181,8 @@ func parse_message_received(json_message):
 			Constants.Action_LobbyChanged:
 				if json_message.payload.has("lobby"):
 					emit_signal("lobby_changed", json_message.payload.lobby)
+					lobby_data = json_message.payload.lobby
+					print(lobby_data)
 			Constants.Action_MessageToLobby:
 				if json_message.payload.has("type"):
 					match (json_message.payload.type):
@@ -193,3 +197,10 @@ func parse_message_received(json_message):
 								emit_signal("shoot_bullet", json_message.payload)
 			Constants.Action_GameStarted:
 				emit_signal("game_started")
+
+func current_pos_in_lobby():
+	if lobby_data:
+		for i in lobby_data.players.size():
+			if lobby_data.players[i].id == current_web_id:
+				return i
+	return 2000

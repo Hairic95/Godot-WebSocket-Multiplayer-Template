@@ -1,5 +1,5 @@
 $godotPath = "C:\PersonalProjects\Godot\Godot.exe"
-$output = "C:\PersonalProjects\Godot\_export\Fantasy-Shooter\02_MULTIPLAYER.exe"
+$output = "C:\PersonalProjects\Godot\_export\02_MULTIPLAYER.exe"
 
 #
 # Author: @November_Dev

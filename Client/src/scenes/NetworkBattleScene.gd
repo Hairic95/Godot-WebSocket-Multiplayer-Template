@@ -5,7 +5,10 @@ var network_bullet_puppet_reference = load("res://src/entities/bullet/BulletPupp
 
 func _ready():
 	randomize()
-	$Entities/Player.global_position = Vector2(randi()%100 - 50, randi()%100 - 50)
+	var lobby_pos = NetworkSocket.current_pos_in_lobby()
+	if lobby_pos < 2:
+		var starting_position = $StartingPositions.get_child(lobby_pos)
+		$Entities/Player.global_position = starting_position.global_position
 	
 	NetworkSocket.connect("web_socket_disconnected", self, "web_socket_disconnected")
 	NetworkSocket.connect("get_own_lobby", self, "get_own_lobby")

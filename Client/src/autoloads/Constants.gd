@@ -21,6 +21,7 @@ const Action_CreateLobby = "CreateLobby"
 const Action_JoinLobby = "JoinLobby"
 const Action_LeaveLobby = "LeaveLobby"
 const Action_LobbyChanged = "LobbyChanged"
+const Action_GetUsersInLobby = "GetUsersInLobby"
 
 const Action_GameStarted = "GameStarted"
 

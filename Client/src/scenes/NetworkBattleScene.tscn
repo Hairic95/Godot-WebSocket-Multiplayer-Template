@@ -64,7 +64,7 @@ texture = ExtResource( 2 )
 [node name="Camera2D" type="Camera2D" parent="Entities/Player"]
 position = Vector2( 0, -50 )
 current = true
-zoom = Vector2( 1.3, 1.3 )
+zoom = Vector2( 4, 4 )
 
 [node name="Bullets" type="YSort" parent="."]
 
@@ -76,3 +76,17 @@ anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+position = Vector2( 328, -566 )
+polygon = PoolVector2Array( -129, -1187, -440, -1068, -909, -797, -1554, -401, -1843, 193, -1809, 946, -1351, 1087, -949, 1195, 69, 1263, 1099, 1217, 1648, 991, 1976, 567, 1959, -118, 1597, -666, 861, -966, 460, -1074, -123, -1187, -140, -1362, 273, -1334, 929, -1221, 1806, -1068, 2061, -751, 2281, 1, 2355, 680, 2021, 1093, 1495, 1263, 1048, 1410, 335, 1427, -242, 1432, -1226, 1455, -1656, 1359, -2188, 1206, -2357, 493, -2205, -214, -1877, -700, -1447, -961, -632, -1260, -140, -1351 )
+
+[node name="StartingPositions" type="Node2D" parent="."]
+
+[node name="Player1Pos" type="Position2D" parent="StartingPositions"]
+position = Vector2( -1072, 24 )
+
+[node name="Player2Pos" type="Position2D" parent="StartingPositions"]
+position = Vector2( 1420, -884 )
