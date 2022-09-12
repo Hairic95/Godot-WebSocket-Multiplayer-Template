@@ -31,6 +31,9 @@ signal game_started()
 signal player_position_update(data)
 signal weapon_update(data)
 signal shoot_bullet(data)
+signal bullet_end(data)
+signal player_death(data)
+signal player_spawn(data)
 
 func _process(_delta):
 	if _is_web_socket_connected() || _is_web_socket_connecting():
@@ -193,8 +196,17 @@ func parse_message_received(json_message):
 							if json_message.payload.has("rotation_direction"):
 								emit_signal("weapon_update", json_message.payload)
 						Constants.GenericAction_ShootBullet:
-							if json_message.payload.has("owner_id") && json_message.payload.has("position") && json_message.payload.has("direction"):
+							if json_message.payload.has("owner_id") && json_message.payload.has("bullet_id") && json_message.payload.has("position") && json_message.payload.has("direction"):
 								emit_signal("shoot_bullet", json_message.payload)
+						Constants.GenericAction_BulletEnd:
+							if json_message.payload.has("bullet_id"):
+								emit_signal("bullet_end", json_message.payload)
+						Constants.GenericAction_PlayerDeath:
+							if json_message.payload.has("player_id"):
+								emit_signal("player_death", json_message.payload)
+						Constants.GenericAction_PlayerSpawn:
+							if json_message.payload.has("player_id") && json_message.payload.has("starting_position"):
+								emit_signal("player_spawn", json_message.payload)
 			Constants.Action_GameStarted:
 				emit_signal("game_started")
 
@@ -204,3 +216,13 @@ func current_pos_in_lobby():
 			if lobby_data.players[i].id == current_web_id:
 				return i
 	return 2000
+
+func get_position_in_lobby():
+	if lobby_data == null || !lobby_data.has("players"):
+		return 0
+	var result = 0
+	for i in lobby_data.players.size():
+		if lobby_data.players[i].id == current_web_id:
+			result = i
+			break
+	return result

@@ -3,8 +3,8 @@
 [ext_resource path="res://assets/fonts/SpecialElite-Regular.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://src/scenes/NetworkScene.gd" type="Script" id=2]
 
-[sub_resource type="DynamicFont" id=1]
-size = 48
+[sub_resource type="DynamicFont" id=5]
+size = 24
 font_data = ExtResource( 1 )
 
 [sub_resource type="DynamicFont" id=2]
@@ -19,9 +19,9 @@ script = ExtResource( 2 )
 [node name="UI" type="Control" parent="LoginSection"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+margin_right = 360.0
+margin_bottom = 240.0
+rect_scale = Vector2( 0.5, 0.5 )
 
 [node name="Label" type="Label" parent="LoginSection/UI"]
 anchor_top = 0.5
@@ -29,8 +29,7 @@ anchor_right = 1.0
 anchor_bottom = 0.5
 margin_top = -152.5
 margin_bottom = -103.5
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 5 )
 text = "Enter a Username"
 align = 1
 valign = 1
@@ -44,7 +43,7 @@ margin_left = -229.0
 margin_top = -29.5
 margin_right = 229.0
 margin_bottom = 29.5
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 5 )
 align = 1
 placeholder_text = "username"
 placeholder_alpha = 0.5
@@ -58,7 +57,7 @@ margin_left = 239.0
 margin_top = 345.0
 margin_right = 573.0
 margin_bottom = 400.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 5 )
 disabled = true
 text = "Connect"
 
@@ -68,6 +67,9 @@ text = "Connect"
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_right = 360.0
+margin_bottom = 240.0
+rect_scale = Vector2( 0.5, 0.5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -94,7 +96,7 @@ margin_left = -167.0
 margin_top = -87.0
 margin_right = 167.0
 margin_bottom = -32.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 5 )
 text = "Create Lobby"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -118,10 +120,11 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -376.5
-margin_top = -246.5
-margin_right = 376.5
-margin_bottom = 246.5
+margin_left = -180.0
+margin_top = -120.0
+margin_right = 540.0
+margin_bottom = 360.0
+rect_scale = Vector2( 0.5, 0.5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -147,7 +150,7 @@ margin_left = -165.0
 margin_top = 140.5
 margin_right = 165.0
 margin_bottom = 195.5
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 5 )
 text = " Leave Lobby "
 
 [node name="LoadingSection" type="CanvasLayer" parent="."]
@@ -158,11 +161,12 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -124.5
-margin_top = -24.5
-margin_right = 124.5
-margin_bottom = 24.5
-custom_fonts/font = SubResource( 1 )
+margin_left = -70.0
+margin_top = -10.0
+margin_right = 179.0
+margin_bottom = 39.0
+rect_scale = Vector2( 0.5, 0.5 )
+custom_fonts/font = SubResource( 5 )
 text = "Loading..."
 __meta__ = {
 "_edit_use_anchors_": false

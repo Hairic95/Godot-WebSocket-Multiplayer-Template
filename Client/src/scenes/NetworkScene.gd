@@ -92,4 +92,4 @@ func _on_LeaveLobby_pressed():
 	NetworkSocket.send_message_leave_lobby()
 
 func game_started():
-	EventBus.emit_signal("change_scene", "network_battle")
+	EventBus.emit_signal("change_scene", "network_platformer")

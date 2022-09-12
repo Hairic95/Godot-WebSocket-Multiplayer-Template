@@ -60,11 +60,11 @@ texture = ExtResource( 2 )
 [node name="Entities" type="YSort" parent="."]
 
 [node name="Player" parent="Entities" instance=ExtResource( 3 )]
+visible = false
 
 [node name="Camera2D" type="Camera2D" parent="Entities/Player"]
-position = Vector2( 0, -50 )
 current = true
-zoom = Vector2( 4, 4 )
+offset_v = -0.6
 
 [node name="Bullets" type="YSort" parent="."]
 

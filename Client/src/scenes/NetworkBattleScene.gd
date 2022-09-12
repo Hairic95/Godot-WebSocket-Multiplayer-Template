@@ -9,6 +9,7 @@ func _ready():
 	if lobby_pos < 2:
 		var starting_position = $StartingPositions.get_child(lobby_pos)
 		$Entities/Player.global_position = starting_position.global_position
+	$Entities/Player.show()
 	
 	NetworkSocket.connect("web_socket_disconnected", self, "web_socket_disconnected")
 	NetworkSocket.connect("get_own_lobby", self, "get_own_lobby")
@@ -65,6 +66,7 @@ func create_bullet(bullet_instance, start_pos, direction):
 	$Bullets.add_child(bullet_instance)
 	NetworkSocket.send_message_to_lobby({
 		"owner_id": NetworkSocket.current_web_id,
+		"bullet_id": bullet_instance.bullet_id,
 		"type": Constants.GenericAction_ShootBullet,
 		"position": {
 			"x": start_pos.x,

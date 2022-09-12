@@ -12,12 +12,22 @@ _global_script_classes=[ {
 "base": "Node2D",
 "class": "AnimationHandler",
 "language": "GDScript",
-"path": "res://assets/textures/battle/characters/AnimationHandler.gd"
+"path": "res://assets/textures/battle/character/Anim.gd"
 }, {
 "base": "Area2D",
 "class": "BulletPuppet",
 "language": "GDScript",
 "path": "res://src/entities/bullet/BulletPuppet.gd"
+}, {
+"base": "KinematicBody2D",
+"class": "NetworkPlatformerPlayer",
+"language": "GDScript",
+"path": "res://src/entities/player/NetworkPlatformerPlayer.gd"
+}, {
+"base": "KinematicBody2D",
+"class": "NetworkPlatformerPlayerPuppet",
+"language": "GDScript",
+"path": "res://src/entities/player/NetworkPlatformerPlayerPuppet.gd"
 }, {
 "base": "KinematicBody2D",
 "class": "NetworkPlayer",
@@ -37,6 +47,8 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "AnimationHandler": "",
 "BulletPuppet": "",
+"NetworkPlatformerPlayer": "",
+"NetworkPlatformerPlayerPuppet": "",
 "NetworkPlayer": "",
 "NetworkPlayerPuppet": "",
 "PlayerBullet": ""
@@ -55,13 +67,27 @@ Uuid="*res://src/autoloads/Uuid.gd"
 NetworkSocket="*res://src/autoloads/NetworkSocket.gd"
 Constants="*res://src/autoloads/Constants.gd"
 
+[debug]
+
+multirun/number_of_windows=2
+multirun/window_distance=1270
+multirun/add_custom_args=true
+multirun/first_window_args="listen"
+multirun/other_window_args="join"
+
 [display]
 
-window/size/width=800
-window/size/height=500
+window/size/width=360
+window/size/height=240
 window/size/resizable=false
+window/size/test_width=900
+window/size/test_height=600
 window/stretch/mode="2d"
 window/stretch/aspect="keep"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/multirun/plugin.cfg" )
 
 [importer_defaults]
 
@@ -90,7 +116,7 @@ texture={
 
 dash={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":32,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777237,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
 next={
@@ -153,6 +179,21 @@ running={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777237,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
+jump={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":87,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+ ]
+}
+slam={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777238,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+ ]
+}
+shoot={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
 
 [layer_names]
 
@@ -167,5 +208,4 @@ running={
 quality/driver/driver_name="GLES2"
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
-environment/default_clear_color=Color( 0.52549, 0.529412, 0.607843, 1 )
-environment/default_environment="res://default_env.tres"
+environment/default_clear_color=Color( 0.0784314, 0.0627451, 0.0745098, 1 )

@@ -87,7 +87,7 @@ func set_state(new_state):
 				anim.play_anim("Idle")
 		"Move":
 			if anim != null && anim is AnimationHandler:
-				anim.play_anim("RunForward")
+				anim.play_anim("Running")
 	if new_state != current_state:
 		current_state = new_state
 
