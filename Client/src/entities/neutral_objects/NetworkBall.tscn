@@ -1,0 +1,3 @@
+[gd_scene format=2]
+
+[node name="KinematicBody2D" type="KinematicBody2D"]

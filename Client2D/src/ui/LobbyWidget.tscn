@@ -1,0 +1,66 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://assets/fonts/SpecialElite-Regular.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://src/ui/LobbyWidget.gd" type="Script" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+size = 32
+font_data = ExtResource( 1 )
+
+[node name="LobbyWidget" type="Panel"]
+margin_right = 400.0
+margin_bottom = 200.0
+rect_min_size = Vector2( 400, 200 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Player1Name" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -107.0
+margin_top = -56.5
+margin_right = 108.0
+margin_bottom = -23.5
+custom_fonts/font = SubResource( 1 )
+text = "Player 1"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Player2Name" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -107.5
+margin_top = -16.5
+margin_right = 107.5
+margin_bottom = 16.5
+custom_fonts/font = SubResource( 1 )
+text = "Player 2"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="JoinLobby" type="Button" parent="."]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -116.0
+margin_top = -60.0
+margin_right = 104.0
+margin_bottom = -21.0
+custom_fonts/font = SubResource( 1 )
+text = "Join"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="JoinLobby" to="." method="_on_JoinLobby_pressed"]

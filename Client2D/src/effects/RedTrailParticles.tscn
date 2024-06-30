@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/effects/TrailParticles.gd" type="Script" id=1]
+
+[sub_resource type="Gradient" id=1]
+offsets = PoolRealArray( 0, 0.385475, 0.659218, 1 )
+colors = PoolColorArray( 1, 1, 1, 1, 0.705882, 0.12549, 0.164706, 1, 0.705882, 0.12549, 0.164706, 1, 0.541176, 0.0980392, 0.12549, 0.427451 )
+
+[node name="RedTrailParticles" type="CPUParticles2D"]
+emitting = false
+amount = 4
+lifetime = 2.0
+one_shot = true
+explosiveness = 1.0
+randomness = 0.31
+lifetime_randomness = 0.61
+emission_shape = 1
+emission_sphere_radius = 9.0
+spread = 0.0
+gravity = Vector2( 0, 0 )
+color_ramp = SubResource( 1 )
+script = ExtResource( 1 )

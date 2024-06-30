@@ -9,6 +9,7 @@ func _ready():
 	if lobby_pos < 2:
 		var starting_position = $StartingPositions.get_child(lobby_pos)
 		$Entities/Player.global_position = starting_position.global_position
+		$Entities/Player.hard_update_position()
 	$Entities/Player.show()
 	
 	NetworkSocket.connect("web_socket_disconnected", self, "web_socket_disconnected")

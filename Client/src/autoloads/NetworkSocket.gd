@@ -7,6 +7,7 @@ var web_socket_client : WebSocketClient
 var current_web_id = ""
 
 var lobby_data = null
+var current_map_key = "Map001"
 
 # Web socket signals
 signal web_socket_connected()
@@ -28,7 +29,10 @@ signal lobby_changed(lobby)
 
 signal game_started()
 
-signal player_position_update(data)
+signal entity_position_update(data)
+signal entity_hard_position_update(data)
+signal entity_update_state(data)
+signal entity_misc_data(data)
 signal weapon_update(data)
 signal shoot_bullet(data)
 signal bullet_end(data)
@@ -189,9 +193,17 @@ func parse_message_received(json_message):
 			Constants.Action_MessageToLobby:
 				if json_message.payload.has("type"):
 					match (json_message.payload.type):
-						Constants.GenericAction_UpdatePosition:
-							if json_message.payload.has("position") && json_message.payload.has("direction"):
-								emit_signal("player_position_update", json_message.payload)
+						Constants.GenericAction_EntityUpdatePosition:
+							if json_message.payload.has("position"):
+								emit_signal("entity_position_update", json_message.payload)
+						Constants.GenericAction_EntityHardUpdatePosition:
+							if json_message.payload.has("position"):
+								emit_signal("entity_hard_position_update", json_message.payload)
+						Constants.GenericAction_EntityUpdateState:
+							if json_message.payload.has("state"):
+								emit_signal("entity_update_state", json_message.payload)
+						Constants.GenericAction_EntityMiscData:
+							emit_signal("entity_misc_data", json_message.payload)
 						Constants.GenericAction_UpdateWeapon:
 							if json_message.payload.has("rotation_direction"):
 								emit_signal("weapon_update", json_message.payload)
@@ -205,10 +217,12 @@ func parse_message_received(json_message):
 							if json_message.payload.has("player_id"):
 								emit_signal("player_death", json_message.payload)
 						Constants.GenericAction_PlayerSpawn:
-							if json_message.payload.has("player_id") && json_message.payload.has("starting_position"):
+							if json_message.payload.has("owner_id") && json_message.payload.has("position"):
 								emit_signal("player_spawn", json_message.payload)
 			Constants.Action_GameStarted:
 				emit_signal("game_started")
+			Constants.Action_MapSelected:
+				current_map_key = json_message.payload.mapKey
 
 func current_pos_in_lobby():
 	if lobby_data:

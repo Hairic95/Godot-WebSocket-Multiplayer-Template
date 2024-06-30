@@ -20,14 +20,14 @@ _global_script_classes=[ {
 "path": "res://src/entities/bullet/BulletPuppet.gd"
 }, {
 "base": "KinematicBody2D",
+"class": "NetworkBody",
+"language": "GDScript",
+"path": "res://src/entities/NetworkBody.gd"
+}, {
+"base": "NetworkBody",
 "class": "NetworkPlatformerPlayer",
 "language": "GDScript",
 "path": "res://src/entities/player/NetworkPlatformerPlayer.gd"
-}, {
-"base": "KinematicBody2D",
-"class": "NetworkPlatformerPlayerPuppet",
-"language": "GDScript",
-"path": "res://src/entities/player/NetworkPlatformerPlayerPuppet.gd"
 }, {
 "base": "KinematicBody2D",
 "class": "NetworkPlayer",
@@ -47,8 +47,8 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "AnimationHandler": "",
 "BulletPuppet": "",
+"NetworkBody": "",
 "NetworkPlatformerPlayer": "",
-"NetworkPlatformerPlayerPuppet": "",
 "NetworkPlayer": "",
 "NetworkPlayerPuppet": "",
 "PlayerBullet": ""
@@ -77,12 +77,12 @@ multirun/other_window_args="join"
 
 [display]
 
-window/size/width=360
-window/size/height=240
+window/size/width=300
+window/size/height=200
 window/size/resizable=false
 window/size/test_width=900
 window/size/test_height=600
-window/stretch/mode="2d"
+window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 
 [editor_plugins]
@@ -202,6 +202,10 @@ shoot={
 2d_physics/layer_3="Enemies"
 2d_physics/layer_4="EnemyBullets"
 2d_physics/layer_20="Death"
+
+[mono]
+
+project/assembly_name="Fantasy Shooter"
 
 [rendering]
 

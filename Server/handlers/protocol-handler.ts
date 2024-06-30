@@ -338,21 +338,6 @@ export default class ProtocolHelper {
     message: Message
   ) => {
     try {
-      switch (message.payload.hasOwnProperty("type") && message.payload.type) {
-        case EGenericAction.UpdatePlayerPosition:
-          if (message.payload.hasOwnProperty("position")) {
-            clientSocket.position.x = message.payload.position.x;
-            clientSocket.position.y = message.payload.position.y;
-          }
-          if (message.payload.hasOwnProperty("direction")) {
-            clientSocket.direction.x = message.payload.direction.x;
-            clientSocket.direction.y = message.payload.direction.y;
-          }
-          break;
-        case EGenericAction.UpdateWeapon:
-          break;
-      }
-
       const lobby: Lobby = gameServer.getLobbyByPlayerId(clientSocket.id);
       if (!!lobby) {
         const lobbyMessage = new Message(

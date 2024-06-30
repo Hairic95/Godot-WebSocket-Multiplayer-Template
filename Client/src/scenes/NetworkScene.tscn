@@ -27,8 +27,10 @@ rect_scale = Vector2( 0.5, 0.5 )
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-margin_top = -152.5
-margin_bottom = -103.5
+margin_left = -38.0
+margin_top = -204.0
+margin_right = -38.0
+margin_bottom = -155.0
 custom_fonts/font = SubResource( 5 )
 text = "Enter a Username"
 align = 1
@@ -39,10 +41,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -229.0
-margin_top = -29.5
-margin_right = 229.0
-margin_bottom = 29.5
+margin_left = -256.0
+margin_top = -100.0
+margin_right = 194.0
+margin_bottom = -62.0
 custom_fonts/font = SubResource( 5 )
 align = 1
 placeholder_text = "username"
@@ -53,10 +55,10 @@ __meta__ = {
 }
 
 [node name="Connect" type="Button" parent="LoginSection/UI"]
-margin_left = 239.0
-margin_top = 345.0
-margin_right = 573.0
-margin_bottom = 400.0
+margin_left = 80.0
+margin_top = 232.0
+margin_right = 506.0
+margin_bottom = 318.0
 custom_fonts/font = SubResource( 5 )
 disabled = true
 text = "Connect"
@@ -92,10 +94,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = -167.0
-margin_top = -87.0
-margin_right = 167.0
-margin_bottom = -32.0
+margin_left = -198.0
+margin_top = -126.0
+margin_right = 136.0
+margin_bottom = -71.0
 custom_fonts/font = SubResource( 5 )
 text = "Create Lobby"
 __meta__ = {
@@ -105,7 +107,8 @@ __meta__ = {
 [node name="NoLobbiesLabel" type="Label" parent="LobbySelectionSection/UI"]
 anchor_right = 1.0
 margin_top = 40.0
-margin_bottom = 54.0
+margin_right = -68.0
+margin_bottom = 73.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 2 )
 text = "No active lobbies. Try creating one!"
@@ -120,14 +123,11 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -180.0
-margin_top = -120.0
-margin_right = 540.0
-margin_bottom = 360.0
+margin_left = -149.0
+margin_top = -96.0
+margin_right = 441.0
+margin_bottom = 302.0
 rect_scale = Vector2( 0.5, 0.5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Label" type="Label" parent="LobbySection/Panel"]
 anchor_left = 0.5

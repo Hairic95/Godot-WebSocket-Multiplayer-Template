@@ -1,92 +1,18 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://assets/textures/platformer/shooter_blue.png" type="Texture" id=1]
+[ext_resource path="res://src/entities/player/PlayerAnimations.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/entities/player/NetworkPlatformerPlayer.gd" type="Script" id=2]
 [ext_resource path="res://assets/sounds/shoot.wav" type="AudioStream" id=3]
 [ext_resource path="res://src/effects/Trail2D.tscn" type="PackedScene" id=4]
 
-[sub_resource type="Animation" id=13]
-resource_name = "Falling"
-tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ 6, 7 ]
-}
-
-[sub_resource type="Animation" id=10]
-resource_name = "Idle"
-tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ 0 ]
-}
-
-[sub_resource type="Animation" id=14]
-resource_name = "Jumping"
-tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ 5 ]
-}
-
-[sub_resource type="Animation" id=11]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 0 ]
-}
-
-[sub_resource type="Animation" id=12]
-resource_name = "Running"
-length = 0.8
-loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2, 0.4, 0.6 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 1, 2, 3, 4 ]
-}
-
-[sub_resource type="RectangleShape2D" id=8]
-extents = Vector2( 3, 6 )
+[sub_resource type="RectangleShape2D" id=16]
+extents = Vector2( 7, 11 )
 
 [sub_resource type="RectangleShape2D" id=9]
 extents = Vector2( 4, 6 )
+
+[sub_resource type="RectangleShape2D" id=8]
+extents = Vector2( 7, 11 )
 
 [sub_resource type="Gradient" id=15]
 offsets = PoolRealArray( 0, 0.189944, 0.614525, 1 )
@@ -96,33 +22,18 @@ colors = PoolColorArray( 0, 0, 0, 0, 0.738281, 0.738281, 0.738281, 0.756863, 0.9
 collision_mask = 0
 script = ExtResource( 2 )
 
-[node name="Sprites" type="Node2D" parent="."]
-
-[node name="BulletSpawn" type="Position2D" parent="Sprites"]
-position = Vector2( 3.93925, -5.88959 )
-
-[node name="Sprite" type="Sprite" parent="Sprites"]
-position = Vector2( 0, -8 )
-texture = ExtResource( 1 )
-hframes = 8
-
-[node name="Anim" type="AnimationPlayer" parent="Sprites"]
-anims/Falling = SubResource( 13 )
-anims/Idle = SubResource( 10 )
-anims/Jumping = SubResource( 14 )
-anims/RESET = SubResource( 11 )
-anims/Running = SubResource( 12 )
+[node name="Sprites" parent="." instance=ExtResource( 1 )]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 0, -5.88959 )
-shape = SubResource( 8 )
+position = Vector2( 0, -11 )
+shape = SubResource( 16 )
 
 [node name="PushBox" type="Area2D" parent="." groups=["pushbox"]]
 collision_layer = 2
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PushBox"]
-position = Vector2( 0, -5.88959 )
+position = Vector2( 0, -6 )
 shape = SubResource( 9 )
 
 [node name="Hitbox" type="Area2D" parent="." groups=["Enemy_Hitbox"]]
@@ -130,7 +41,7 @@ collision_layer = 4
 collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
-position = Vector2( 0, -5.88959 )
+position = Vector2( 0, -11 )
 shape = SubResource( 8 )
 
 [node name="CenterTrail" parent="." instance=ExtResource( 4 )]
