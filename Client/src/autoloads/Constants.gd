@@ -1,12 +1,10 @@
 extends Node
 
 # SERVER
-#const Server_SecretKey = "YOUR_SECRET_KEY_HERE_NEVER_SHOW_IT_:)"
-const Server_SecretKey = "b7524f5c-f4f1-4eeb-a1d7-96dcf23d4802"
+const Server_SecretKey = "YOUR_SECRET_KEY_HERE_NEVER_SHOW_IT_:)"
 
 # Change to your server url, currently set to the localhost
-#const Server_WSUrl = "ws://127.0.0.1:6900"
-const Server_WSUrl = "wss://game.hairiclilred.com"
+const Server_WSUrl = "ws://127.0.0.1:6900"
 
 # ACTIONS
 
