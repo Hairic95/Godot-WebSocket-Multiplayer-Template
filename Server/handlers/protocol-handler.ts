@@ -242,8 +242,8 @@ export default class ProtocolHelper {
           for (let el of lobby.players) {
             el.socket.send(
               new Message(EAction.PlayerLeft, {
-                clientId: clientSocket.id,
-              })
+                webId: clientSocket.id,
+              }).toString()
             );
           }
         }

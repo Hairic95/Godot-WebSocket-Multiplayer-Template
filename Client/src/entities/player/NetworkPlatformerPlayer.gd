@@ -40,7 +40,10 @@ var can_shoot = true
 
 var cut_jump = false
 
+var target_weapon_rotation = 0
+
 func _ready():
+	target_weapon_rotation = $Sprites/PlayerWeapon.rotation
 	EventBus.emit_signal("player_health_update", health)
 	$CenterTrail.parent = self
 	$DashTrail.parent = self
@@ -198,7 +201,8 @@ func _physics_process(delta):
 				"entity_id": entity_uuid,
 				"type": Constants.GenericAction_EntityMiscProcessData,
 				"facing": $Sprites.scale.x,
-				"is_dashing": current_state == "Dashing"
+				"is_dashing": current_state == "Dashing",
+				"weapon_rotation": $Sprites/PlayerWeapon.rotation
 			})
 		else:
 			packet_time += delta
@@ -209,6 +213,7 @@ func _physics_process(delta):
 			Input.set_custom_mouse_cursor(null)
 	else:
 		global_position = lerp(global_position, target_position, .6) 
+		$Sprites/PlayerWeapon.rotation = lerp($Sprites/PlayerWeapon.rotation, target_weapon_rotation, .4) 
 
 func set_state(new_state):
 	if new_state != current_state:
@@ -281,6 +286,12 @@ func shoot():
 	new_muzzle_effect.rotation = bullet_direction.angle()
 	EventBus.emit_signal("create_effect", new_muzzle_effect, starting_position + bullet_direction * 5)
 	EventBus.emit_signal("create_screenshake", 6)
+	
+	NetworkSocket.send_message_to_lobby({
+		"type": Constants.GenericAction_EntityMiscOneOff,
+		"entity_id": entity_uuid,
+		"one_off_type": "play_shoot",
+	})
 	$ShootSFX.stop()
 	$ShootSFX.pitch_scale = .8 + randf() * .3
 	$ShootSFX.play()
@@ -310,13 +321,12 @@ func remote_entity_misc_process_data(data):
 		.remote_entity_misc_process_data(data)
 		set_dash_trails(data.is_dashing)
 		$Sprites.scale.x = data.facing
+		target_weapon_rotation = data.weapon_rotation
 
 func remote_entity_misc_one_off(data):
 	if data.entity_id == entity_uuid:
+		if data.one_off_type == "play_shoot":
+			$ShootSFX.stop()
+			$ShootSFX.pitch_scale = .8 + randf() * .3
+			$ShootSFX.play()
 		.remote_entity_misc_one_off(data)
-
-func shoot_bullet(data):
-	if data.owner_id == owner_uuid:
-		$ShootSFX.stop()
-		$ShootSFX.pitch_scale = .8 + randf() * .3
-		$ShootSFX.play()

@@ -1,50 +1,53 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://assets/fonts/SpecialElite-Regular.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/textures/menu/menu_screen.png" type="Texture" id=1]
 [ext_resource path="res://src/scenes/NetworkScene.gd" type="Script" id=2]
+[ext_resource path="res://assets/fonts/Proxed.ttf" type="DynamicFontData" id=3]
 
 [sub_resource type="DynamicFont" id=5]
-size = 24
-font_data = ExtResource( 1 )
+font_data = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=2]
-size = 32
-font_data = ExtResource( 1 )
+font_data = ExtResource( 3 )
 
 [node name="NetworkScene" type="Node2D"]
 script = ExtResource( 2 )
+
+[node name="MenuScreen" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+centered = false
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="LoginSection" type="CanvasLayer" parent="."]
 
 [node name="UI" type="Control" parent="LoginSection"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 360.0
-margin_bottom = 240.0
-rect_scale = Vector2( 0.5, 0.5 )
 
-[node name="Label" type="Label" parent="LoginSection/UI"]
-anchor_top = 0.5
+[node name="Vbox" type="VBoxContainer" parent="LoginSection/UI"]
+anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
-anchor_bottom = 0.5
-margin_left = -38.0
-margin_top = -204.0
-margin_right = -38.0
-margin_bottom = -155.0
+anchor_bottom = 1.0
+margin_left = -146.0
+margin_top = -77.0
+margin_right = -8.0
+margin_bottom = -8.0
+
+[node name="Label" type="Label" parent="LoginSection/UI/Vbox"]
+margin_right = 138.0
+margin_bottom = 14.0
 custom_fonts/font = SubResource( 5 )
 text = "Enter a Username"
 align = 1
 valign = 1
 
-[node name="LineEdit" type="LineEdit" parent="LoginSection/UI"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -256.0
-margin_top = -100.0
-margin_right = 194.0
-margin_bottom = -62.0
+[node name="LineEdit" type="LineEdit" parent="LoginSection/UI/Vbox"]
+margin_top = 18.0
+margin_right = 138.0
+margin_bottom = 42.0
 custom_fonts/font = SubResource( 5 )
 align = 1
 placeholder_text = "username"
@@ -54,34 +57,57 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Connect" type="Button" parent="LoginSection/UI"]
-margin_left = 80.0
-margin_top = 232.0
-margin_right = 506.0
-margin_bottom = 318.0
+[node name="Connect" type="Button" parent="LoginSection/UI/Vbox"]
+margin_top = 46.0
+margin_right = 138.0
+margin_bottom = 66.0
 custom_fonts/font = SubResource( 5 )
 disabled = true
 text = "Connect"
 
 [node name="LobbySelectionSection" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="UI" type="Control" parent="LobbySelectionSection"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 360.0
-margin_bottom = 240.0
-rect_scale = Vector2( 0.5, 0.5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+margin_right = -2.0
+margin_bottom = 1.0
+
+[node name="Vbox" type="VBoxContainer" parent="LobbySelectionSection/UI"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -179.0
+margin_top = -46.0
+margin_right = -8.0
+margin_bottom = -8.0
+alignment = 2
+
+[node name="NoLobbiesLabel" type="Label" parent="LobbySelectionSection/UI/Vbox"]
+margin_right = 171.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "No active lobbies. Try creating one!"
+align = 1
+valign = 1
+
+[node name="CreateLobby" type="Button" parent="LobbySelectionSection/UI/Vbox"]
+margin_top = 18.0
+margin_right = 171.0
+margin_bottom = 38.0
+custom_fonts/font = SubResource( 5 )
+text = "Create Lobby"
 
 [node name="ScrollLobbies" type="ScrollContainer" parent="LobbySelectionSection/UI"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+margin_left = 13.0
+margin_top = 12.0
+margin_right = -8.0
+margin_bottom = -32.0
 
 [node name="Lobbies" type="GridContainer" parent="LobbySelectionSection/UI/ScrollLobbies"]
 columns = 2
@@ -89,104 +115,126 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CreateLobby" type="Button" parent="LobbySelectionSection/UI"]
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-margin_left = -198.0
-margin_top = -126.0
-margin_right = 136.0
-margin_bottom = -71.0
-custom_fonts/font = SubResource( 5 )
-text = "Create Lobby"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="NoLobbiesLabel" type="Label" parent="LobbySelectionSection/UI"]
-anchor_right = 1.0
-margin_top = 40.0
-margin_right = -68.0
-margin_bottom = 73.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 2 )
-text = "No active lobbies. Try creating one!"
-align = 1
-valign = 1
-
 [node name="LobbySection" type="CanvasLayer" parent="."]
-
-[node name="Panel" type="Panel" parent="LobbySection"]
 visible = false
+
+[node name="Panel" type="Control" parent="LobbySection"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -149.0
-margin_top = -96.0
-margin_right = 441.0
-margin_bottom = 302.0
-rect_scale = Vector2( 0.5, 0.5 )
+margin_left = -142.5
+margin_top = -90.5
+margin_right = 142.5
+margin_bottom = 90.5
+
+[node name="Panel" type="Panel" parent="LobbySection/Panel"]
+modulate = Color( 1, 1, 1, 0.768627 )
+anchor_right = 1.0
+anchor_bottom = 1.0
 
 [node name="Label" type="Label" parent="LobbySection/Panel"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -191.5
-margin_top = -16.5
-margin_right = 191.5
-margin_bottom = 16.5
+margin_left = -107.5
+margin_top = -10.0
+margin_right = 107.5
+margin_bottom = 10.0
 custom_fonts/font = SubResource( 2 )
 text = "Waiting for opponent..."
+align = 1
 
 [node name="LeaveLobby" type="Button" parent="LobbySection/Panel"]
 anchor_left = 0.5
-anchor_top = 0.5
+anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -165.0
-margin_top = 140.5
-margin_right = 165.0
-margin_bottom = 195.5
+anchor_bottom = 1.0
+margin_left = -86.5
+margin_top = -36.0
+margin_right = 86.5
+margin_bottom = -16.0
 custom_fonts/font = SubResource( 5 )
 text = " Leave Lobby "
 
 [node name="LoadingSection" type="CanvasLayer" parent="."]
-
-[node name="Label" type="Label" parent="LoadingSection"]
 visible = false
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -70.0
-margin_top = -10.0
-margin_right = 179.0
-margin_bottom = 39.0
-rect_scale = Vector2( 0.5, 0.5 )
-custom_fonts/font = SubResource( 5 )
-text = "Loading..."
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="Panel" type="Panel" parent="LoadingSection/Label"]
+[node name="UI" type="Control" parent="LoadingSection"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="Panel" parent="LoadingSection/UI"]
+modulate = Color( 1, 1, 1, 0.768627 )
 show_behind_parent = true
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -203.0
-margin_top = -51.0
-margin_right = 203.0
-margin_bottom = 51.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+margin_left = -114.0
+margin_top = -31.5
+margin_right = 114.0
+margin_bottom = 31.5
 
-[connection signal="text_changed" from="LoginSection/UI/LineEdit" to="." method="_on_LineEdit_text_changed"]
-[connection signal="pressed" from="LoginSection/UI/Connect" to="." method="_on_Connect_pressed"]
-[connection signal="pressed" from="LobbySelectionSection/UI/CreateLobby" to="." method="_on_CreateLobby_pressed"]
+[node name="Label" type="Label" parent="LoadingSection/UI"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -64.5
+margin_top = -7.0
+margin_right = 64.5
+margin_bottom = 7.0
+custom_fonts/font = SubResource( 5 )
+text = "Loading..."
+align = 1
+
+[node name="Warning" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="UI" type="Control" parent="Warning"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="Panel" parent="Warning/UI"]
+modulate = Color( 1, 1, 1, 0.768627 )
+show_behind_parent = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -114.0
+margin_top = -31.5
+margin_right = 114.0
+margin_bottom = 31.5
+
+[node name="Label" type="Label" parent="Warning/UI"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -99.0
+margin_top = -20.0
+margin_right = 99.0
+margin_bottom = -6.0
+custom_fonts/font = SubResource( 5 )
+align = 1
+
+[node name="DismissWarning" type="Button" parent="Warning/UI"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -86.5
+margin_top = -95.0
+margin_right = 86.5
+margin_bottom = -75.0
+custom_fonts/font = SubResource( 5 )
+text = "Dismiss"
+
+[connection signal="text_changed" from="LoginSection/UI/Vbox/LineEdit" to="." method="_on_LineEdit_text_changed"]
+[connection signal="pressed" from="LoginSection/UI/Vbox/Connect" to="." method="_on_Connect_pressed"]
+[connection signal="pressed" from="LobbySelectionSection/UI/Vbox/CreateLobby" to="." method="_on_CreateLobby_pressed"]
 [connection signal="pressed" from="LobbySection/Panel/LeaveLobby" to="." method="_on_LeaveLobby_pressed"]
+[connection signal="pressed" from="Warning/UI/DismissWarning" to="." method="_on_DismissWarning_pressed"]

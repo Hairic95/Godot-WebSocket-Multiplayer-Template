@@ -11,12 +11,16 @@ func _ready():
 	
 	change_scene("network")
 
-func change_scene(new_scene):
-	if scenes.has(new_scene):
+func change_scene(new_scene_tag, params = null):
+	if scenes.has(new_scene_tag):
 		for child in $CurrentScene.get_children():
 			child.queue_free()
 		
-		$CurrentScene.add_child(scenes[new_scene].instance())
+		var new_scene = scenes[new_scene_tag].instance()
+		$CurrentScene.add_child(new_scene)
+		if new_scene_tag == "network" && params != null:
+			if params.player_disconnected:
+				new_scene.show_player_disconnected()
 	else:
 		change_scene("main_menu")
 

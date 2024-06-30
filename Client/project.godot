@@ -57,8 +57,8 @@ Constants="*res://src/autoloads/Constants.gd"
 
 [debug]
 
-multirun/number_of_windows=2
-multirun/window_distance=1270
+multirun/number_of_windows=4
+multirun/window_distance=100
 multirun/add_custom_args=true
 multirun/first_window_args="listen"
 multirun/other_window_args="join"
@@ -76,6 +76,10 @@ window/stretch/aspect="keep"
 [editor_plugins]
 
 enabled=PoolStringArray( "res://addons/multirun/plugin.cfg" )
+
+[global]
+
+multirun=false
 
 [importer_defaults]
 

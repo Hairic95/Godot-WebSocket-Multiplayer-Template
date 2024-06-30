@@ -17,6 +17,7 @@ func _ready():
 	NetworkSocket.connect("get_own_lobby", self, "get_own_lobby")
 	NetworkSocket.connect("entity_death", self, "entity_death")
 	NetworkSocket.connect("entity_spawn", self, "entity_spawn")
+	NetworkSocket.connect("player_left", self, "player_left")
 	
 	EventBus.connect("entity_death", self,"entity_death")
 	EventBus.connect("create_bullet", self, "create_bullet")
@@ -35,6 +36,13 @@ func _ready():
 	#$Entities/PlatformerPlayer.global_position = respawn_point.global_position
 
 func _process(delta):
+	if Input.is_action_just_pressed("ui_cancel"):
+		if $LobbySection.visible:
+			$LobbySection.hide()
+		else:
+			$LobbySection.show()
+		set_player_active(!$LobbySection.visible)
+	
 	if $RespawnTimer.wait_time >= 0:
 		$RespawnTimerUI/Panel/Countdown.text = str(int($RespawnTimer.time_left) + 1)
 
@@ -88,7 +96,6 @@ func entity_death(data):
 			$PlayerUI/PlayerPoints.text = str(player_points)
 
 func _on_RespawnTimer_timeout():
-	print("TEST")
 	create_player()
 
 func create_player():
@@ -150,3 +157,21 @@ func get_avaiable_respawn_points():
 		if respawn_point.is_avaiable():
 			result.append(respawn_point)
 	return result
+
+func player_left(data):
+	if NetworkSocket.lobby_data != null:
+		for player in NetworkSocket.lobby_data.players:
+			if data == player.id:
+				NetworkSocket.send_message_leave_lobby()
+				EventBus.emit_signal("change_scene", "network", {"player_disconnected": true})
+				return
+
+func set_player_active(value):
+	for entity in $Entities.get_children():
+		if entity is NetworkPlatformerPlayer && entity.owner_uuid == NetworkSocket.current_web_id:
+			entity.active = value
+
+
+func _on_LeaveLobby_pressed():
+	NetworkSocket.send_message_leave_lobby()
+	EventBus.emit_signal("change_scene", "network")

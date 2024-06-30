@@ -56,7 +56,6 @@ func remote_entity_death(data):
 	if data.entity_id == entity_uuid:
 		if !fake_destroy:
 			EventBus.emit_signal("create_effect", end_bullet_effect_reference.instance(), global_position)
-		print("TEST")
 		.remote_entity_death(data)
 
 func remote_entity_position_update(data):

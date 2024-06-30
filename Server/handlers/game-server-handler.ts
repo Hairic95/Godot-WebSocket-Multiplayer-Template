@@ -23,8 +23,8 @@ export default class GameServerHandler {
   public removeClient(clientId: String) {
     try {
       // 1) If the player was in a lobby then remove the player from it
-      this.lobbies.forEach((lobby) => {
-        lobby.players.forEach((player) => {
+      for (const lobby of this.lobbies) {
+        for (const player of lobby.players) {
           if (player.id === clientId) {
             lobby.removePlayer(clientId);
             if (lobby.players.length === 0) {
@@ -36,8 +36,8 @@ export default class GameServerHandler {
               );
             }
           }
-        });
-      });
+        }
+      }
       // 2) Remove the client from the connected client list
       const clientIndex: number = this.connectedClients.findIndex(
         (el) => el.id === clientId

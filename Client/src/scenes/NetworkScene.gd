@@ -13,54 +13,58 @@ func _ready():
 	NetworkSocket.connect("left_lobby", self, "left_lobby")
 	
 	NetworkSocket.connect("game_started", self, "game_started")
+	
+	if NetworkSocket._is_web_socket_connected():
+		$LoginSection.hide()
+		$LobbySelectionSection.show()
 
 func _on_LineEdit_text_changed(new_text):
-	$LoginSection/UI/Connect.disabled = new_text == ""
+	$LoginSection/UI/Vbox/Connect.disabled = new_text == ""
 
 func _on_Connect_pressed():
-	$LoginSection/UI.hide()
-	$LoadingSection/Label.show()
+	$LoginSection.hide()
+	$LoadingSection.show()
 	yield(get_tree().create_timer(.01), "timeout")
-	NetworkSocket.connect_to_server($LoginSection/UI/LineEdit.text)
+	NetworkSocket.connect_to_server($LoginSection/UI/Vbox/LineEdit.text)
 
 func on_connection(success):
 	if success:
-		$LoadingSection/Label.hide()
-		$LobbySelectionSection/UI.show()
+		$LoadingSection.hide()
+		$LobbySelectionSection.show()
 		NetworkSocket.send_message_get_lobbies()
 	else:
-		$LoadingSection/Label.hide()
-		$LoginSection/UI.show()
+		$LoadingSection.hide()
+		$LoginSection.show()
 
 func on_disconnection():
-	$LobbySelectionSection/UI.hide()
-	$LobbySection/Panel.hide()
-	$LoadingSection/Label.hide()
-	$LoginSection/UI.show()
+	$LobbySelectionSection.hide()
+	$LobbySection.hide()
+	$LoadingSection.hide()
+	$LoginSection.show()
 
 func _on_CreateLobby_pressed():
-	$LobbySelectionSection/UI.hide()
-	$LoadingSection/Label.show()
+	$LobbySelectionSection.hide()
+	$LoadingSection.show()
 	yield(get_tree().create_timer(.01), "timeout")
 	NetworkSocket.send_message_create_lobby()
 
 func lobby_join_attempt():
 	yield(get_tree().create_timer(.01), "timeout")
-	$LobbySelectionSection/UI.hide()
-	$LoadingSection/Label.show()
+	$LobbySelectionSection.hide()
+	$LoadingSection.show()
 	
 
 func created_lobby(success):
 	if success:
 		$LobbySection/Panel/Label.text = "Waiting for opponent..."
-		$LoadingSection/Label.hide()
-		$LobbySection/Panel.show()
+		$LoadingSection.hide()
+		$LobbySection.show()
 
 func joined_lobby(success):
 	if success:
 		$LobbySection/Panel/Label.text = "Waiting for opponent..."
-		$LoadingSection/Label.hide()
-		$LobbySection/Panel.show()
+		$LoadingSection.hide()
+		$LobbySection.show()
 
 func lobby_changed(lobby):
 	if lobby.players.size() > 1:
@@ -70,17 +74,17 @@ func lobby_changed(lobby):
 
 func left_lobby(success):
 	if success:
-		$LobbySection/Panel.hide()
-		$LobbySelectionSection/UI.show()
+		$LobbySection.hide()
+		$LobbySelectionSection.show()
 		NetworkSocket.send_message_get_lobbies()
 
 func update_lobby_list(lobbies):
 	for lobby in $LobbySelectionSection/UI/ScrollLobbies/Lobbies.get_children():
 		lobby.queue_free()
 	if lobbies.size() == 0:
-		$LobbySelectionSection/UI/NoLobbiesLabel.show()
+		$LobbySelectionSection/UI/Vbox/NoLobbiesLabel.show()
 	else:
-		$LobbySelectionSection/UI/NoLobbiesLabel.hide()
+		$LobbySelectionSection/UI/Vbox/NoLobbiesLabel.hide()
 		for lobby in lobbies:
 			var new_lobby_widget = lobby_widget_reference.instance()
 			new_lobby_widget.init(lobby)
@@ -93,3 +97,13 @@ func _on_LeaveLobby_pressed():
 
 func game_started():
 	EventBus.emit_signal("change_scene", "network_platformer")
+
+func show_player_disconnected():
+	$LoginSection.hide()
+	$Warning.show()
+	$Warning/UI/Label.text = "The other player disconnected."
+
+
+func _on_DismissWarning_pressed():
+	$Warning.hide()
+	$LobbySelectionSection.show()
