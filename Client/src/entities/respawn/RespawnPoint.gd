@@ -6,8 +6,9 @@ func is_avaiable():
 	return enemies.empty()
 
 func _on_Area2D_area_entered(area):
-	if area.is_in_group("Enemy_Hitbox"):
-		enemies.append(area)
+	var area_parent = area.get_parent()
+	if area_parent is NetworkPlatformerPlayer:
+		enemies.append(area_parent)
 
 func _on_Area2D_area_exited(area):
 	if enemies.has(area):

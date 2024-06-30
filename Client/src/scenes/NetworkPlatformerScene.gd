@@ -14,6 +14,7 @@ var current_map = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	randomize()
 	NetworkSocket.connect("get_own_lobby", self, "get_own_lobby")
 	NetworkSocket.connect("entity_death", self, "entity_death")
 	NetworkSocket.connect("entity_spawn", self, "entity_spawn")

@@ -334,13 +334,12 @@ collision_mask = 23
 shape = SubResource( 16 )
 
 [node name="RespawnPoints" type="Node2D" parent="."]
-visible = false
 
 [node name="RespawnPoint" parent="RespawnPoints" instance=ExtResource( 2 )]
-position = Vector2( 117, 229 )
+position = Vector2( 27, 60 )
 
 [node name="Area2D" parent="RespawnPoints/RespawnPoint" index="0"]
-position = Vector2( -81, -167 )
+position = Vector2( 12, 13 )
 
 [node name="CollisionShape2D" parent="RespawnPoints/RespawnPoint/Area2D" index="0"]
 position = Vector2( 201.5, -19 )

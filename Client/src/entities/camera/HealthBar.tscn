@@ -1,13 +1,13 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://assets/textures/platformer/health_bar/health_bar_section.png" type="Texture" id=1]
-[ext_resource path="res://assets/textures/platformer/health_bar/health_bar_Container.png" type="Texture" id=2]
+[ext_resource path="res://assets/textures/platformer/health_bar/health_bar.png" type="Texture" id=2]
 [ext_resource path="res://src/entities/camera/HealthBar.gd" type="Script" id=7]
 
 [node name="HealthBar" type="Node2D"]
 script = ExtResource( 7 )
 
-[node name="Bar" type="Sprite" parent="."]
+[node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )
 
 [node name="Ticks" type="Node2D" parent="."]
