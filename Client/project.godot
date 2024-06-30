@@ -14,10 +14,10 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://assets/textures/battle/character/Anim.gd"
 }, {
-"base": "Area2D",
-"class": "BulletPuppet",
+"base": "NetworkBody",
+"class": "NetworkBall",
 "language": "GDScript",
-"path": "res://src/entities/bullet/BulletPuppet.gd"
+"path": "res://src/entities/neutral_objects/NetworkBall.gd"
 }, {
 "base": "KinematicBody2D",
 "class": "NetworkBody",
@@ -25,33 +25,21 @@ _global_script_classes=[ {
 "path": "res://src/entities/NetworkBody.gd"
 }, {
 "base": "NetworkBody",
+"class": "NetworkBullet",
+"language": "GDScript",
+"path": "res://src/entities/bullet/NetworkBullet.gd"
+}, {
+"base": "NetworkBody",
 "class": "NetworkPlatformerPlayer",
 "language": "GDScript",
 "path": "res://src/entities/player/NetworkPlatformerPlayer.gd"
-}, {
-"base": "KinematicBody2D",
-"class": "NetworkPlayer",
-"language": "GDScript",
-"path": "res://src/entities/player/NetworkPlayer.gd"
-}, {
-"base": "KinematicBody2D",
-"class": "NetworkPlayerPuppet",
-"language": "GDScript",
-"path": "res://src/entities/player/NetworkPlayerPuppet.gd"
-}, {
-"base": "Area2D",
-"class": "PlayerBullet",
-"language": "GDScript",
-"path": "res://src/entities/bullet/Bullet.gd"
 } ]
 _global_script_class_icons={
 "AnimationHandler": "",
-"BulletPuppet": "",
+"NetworkBall": "",
 "NetworkBody": "",
-"NetworkPlatformerPlayer": "",
-"NetworkPlayer": "",
-"NetworkPlayerPuppet": "",
-"PlayerBullet": ""
+"NetworkBullet": "",
+"NetworkPlatformerPlayer": ""
 }
 
 [application]

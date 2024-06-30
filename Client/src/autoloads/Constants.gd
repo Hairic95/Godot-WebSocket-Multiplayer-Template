@@ -34,9 +34,27 @@ const Action_MessageToLobby = "MessageToLobby"
 const GenericAction_EntityHardUpdatePosition = "EntityHardUpdatePosition"
 const GenericAction_EntityUpdatePosition = "EntityUpdatePosition"
 const GenericAction_EntityUpdateState = "EntityUpdateState"
-const GenericAction_EntityMiscData = "EntityMiscData"
-const GenericAction_UpdateWeapon = "EntityUpdateWeapon"
-const GenericAction_ShootBullet = "ShootBullet"
-const GenericAction_BulletEnd = "BulletEnd"
-const GenericAction_PlayerDeath = "PlayerDeath"
-const GenericAction_PlayerSpawn = "PlayerSpawn"
+const GenericAction_EntityMiscProcessData = "EntityMiscProcessData"
+const GenericAction_EntityMiscOneOff = "EntityMiscOneOff"
+const GenericAction_EntityDeath = "EntityDeath"
+const GenericAction_EntitySpawn = "EntitySpawn"
+
+# ENTITIES TYPES
+
+const EntityType_Player = "Player"
+const EntityType_Bullet = "Bullet"
+
+var BulletCategories = {
+	"regular": load("res://src/entities/bullet/NetworkBullet.tscn")
+}
+
+const BulletCategories_Regular = "regular"
+
+func get_bullet_by_category(bullet_category):
+	var result = Constants.BulletCategories[bullet_category]
+	if result != null:
+		return result.instance()
+	else:
+		return null
+	# TODO when adding new bullet types
+	#match(bullet_category):

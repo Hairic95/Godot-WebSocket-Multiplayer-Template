@@ -2,6 +2,7 @@ extends KinematicBody2D
 class_name NetworkBody
 
 var active: bool = true
+var is_neutral = false
 var current_speed = 0
 var speed = 0
 
@@ -17,16 +18,18 @@ func _ready():
 	if is_client_owner():
 		entity_uuid = Uuid.v4()
 	target_position = global_position
-	NetworkSocket.connect("entity_position_update", self, "entity_position_update")
-	NetworkSocket.connect("entity_update_state", self, "entity_update_state")
-	NetworkSocket.connect("entity_hard_position_update", self, "entity_hard_update_position")
-	NetworkSocket.connect("entity_misc_data", self, "entity_misc_data")
+	NetworkSocket.connect("entity_position_update", self, "remote_entity_position_update")
+	NetworkSocket.connect("entity_update_state", self, "remote_entity_update_state")
+	NetworkSocket.connect("entity_hard_position_update", self, "remote_entity_hard_update_position")
+	NetworkSocket.connect("entity_misc_process_data", self, "remote_entity_misc_process_data")
+	NetworkSocket.connect("entity_misc_one_off", self, "remote_entity_misc_one_off")
+	NetworkSocket.connect("entity_death", self, "remote_entity_death")
 
 
 func _process(delta):
 	if is_client_owner():
 		NetworkSocket.send_message_to_lobby({
-			"id": entity_uuid, #NetworkSocket.current_web_id,
+			"entity_id": entity_uuid, #NetworkSocket.current_web_id,
 			"type": Constants.GenericAction_EntityUpdatePosition,
 			"position": {
 				"x": global_position.x,
@@ -35,26 +38,31 @@ func _process(delta):
 			"speed": current_speed,
 		})
 
-func entity_position_update(data):
-	if data.id == entity_uuid:
+func remote_entity_position_update(data):
+	if data.entity_id == entity_uuid:
 		target_position = Vector2(data.position.x, data.position.y)
 		movement_direction = Vector2(data.position.x, data.position.y) - target_position
 		speed = data.speed
-		#target_position = lerp(global_position, Vector2(data.position.x, data.position.y), .5)
-		
-		#$Sprites/PlayerWeapon.rotation = data.weapon_rotation
 
-func entity_update_state(data):
-	if data.id == entity_uuid:
+func remote_entity_update_state(data):
+	if data.entity_id == entity_uuid:
 		pass
 
-func entity_hard_update_position(data):
-	if data.id == entity_uuid:
+func remote_entity_hard_update_position(data):
+	if data.entity_id == entity_uuid:
 		global_position = Vector2(data.position.x, data.position.y)
 
-func entity_misc_data(data):
-	if data.id == entity_uuid:
+func remote_entity_misc_process_data(data):
+	if data.entity_id == entity_uuid:
+		pass
+
+func remote_entity_death(data):
+	if data.entity_id == entity_uuid:
+		queue_free()
+
+func remote_entity_misc_one_off(data):
+	if data.entity_id == entity_uuid:
 		pass
 
 func is_client_owner():
-	return owner_uuid == NetworkSocket.current_web_id
+	return owner_uuid == NetworkSocket.current_web_id || (is_neutral && NetworkSocket.is_lobby_master)

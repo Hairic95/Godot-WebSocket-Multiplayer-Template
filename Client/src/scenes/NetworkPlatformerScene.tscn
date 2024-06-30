@@ -91,6 +91,6 @@ align = 1
 valign = 1
 
 [node name="HealthBar" parent="PlayerUI" instance=ExtResource( 7 )]
-position = Vector2( 45.2001, 209.012 )
+position = Vector2( 37, 181 )
 
 [connection signal="timeout" from="RespawnTimer" to="." method="_on_RespawnTimer_timeout"]

@@ -10,7 +10,6 @@ signal create_screenshake(force)
 
 signal player_health_update(current_hit_points)
 
-signal player_death()
-signal opponent_death()
+signal entity_death(data)
 
 signal start_screenshake(shake_force)

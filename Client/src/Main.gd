@@ -2,7 +2,6 @@ extends Node
 
 var scenes = {
 	"network": preload("res://src/scenes/NetworkScene.tscn"),
-	"network_battle": preload("res://src/scenes/NetworkBattleScene.tscn"),
 	"network_platformer": preload("res://src/scenes/NetworkPlatformerScene.tscn"),
 }
 

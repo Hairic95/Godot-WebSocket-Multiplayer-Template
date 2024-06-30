@@ -5,6 +5,7 @@ var current_username : String = ""
 var web_socket_client : WebSocketClient
 
 var current_web_id = ""
+var is_lobby_master = false
 
 var lobby_data = null
 var current_map_key = "Map001"
@@ -32,12 +33,10 @@ signal game_started()
 signal entity_position_update(data)
 signal entity_hard_position_update(data)
 signal entity_update_state(data)
-signal entity_misc_data(data)
-signal weapon_update(data)
-signal shoot_bullet(data)
-signal bullet_end(data)
-signal player_death(data)
-signal player_spawn(data)
+signal entity_misc_process_data(data)
+signal entity_misc_one_off(data)
+signal entity_death(data)
+signal entity_spawn(data)
 
 func _process(_delta):
 	if _is_web_socket_connected() || _is_web_socket_connecting():
@@ -179,17 +178,18 @@ func parse_message_received(json_message):
 			Constants.Action_CreateLobby:
 				if json_message.payload.has("success"):
 					emit_signal("created_lobby", json_message.payload.success)
+				is_lobby_master = true
 			Constants.Action_JoinLobby:
 				if json_message.payload.has("success"):
 					emit_signal("joined_lobby", json_message.payload.success)
 			Constants.Action_LeaveLobby:
 				if json_message.payload.has("success"):
 					emit_signal("left_lobby", json_message.payload.success)
+				is_lobby_master = false
 			Constants.Action_LobbyChanged:
 				if json_message.payload.has("lobby"):
 					emit_signal("lobby_changed", json_message.payload.lobby)
 					lobby_data = json_message.payload.lobby
-					print(lobby_data)
 			Constants.Action_MessageToLobby:
 				if json_message.payload.has("type"):
 					match (json_message.payload.type):
@@ -202,23 +202,14 @@ func parse_message_received(json_message):
 						Constants.GenericAction_EntityUpdateState:
 							if json_message.payload.has("state"):
 								emit_signal("entity_update_state", json_message.payload)
-						Constants.GenericAction_EntityMiscData:
-							emit_signal("entity_misc_data", json_message.payload)
-						Constants.GenericAction_UpdateWeapon:
-							if json_message.payload.has("rotation_direction"):
-								emit_signal("weapon_update", json_message.payload)
-						Constants.GenericAction_ShootBullet:
-							if json_message.payload.has("owner_id") && json_message.payload.has("bullet_id") && json_message.payload.has("position") && json_message.payload.has("direction"):
-								emit_signal("shoot_bullet", json_message.payload)
-						Constants.GenericAction_BulletEnd:
-							if json_message.payload.has("bullet_id"):
-								emit_signal("bullet_end", json_message.payload)
-						Constants.GenericAction_PlayerDeath:
-							if json_message.payload.has("player_id"):
-								emit_signal("player_death", json_message.payload)
-						Constants.GenericAction_PlayerSpawn:
-							if json_message.payload.has("owner_id") && json_message.payload.has("position"):
-								emit_signal("player_spawn", json_message.payload)
+						Constants.GenericAction_EntityMiscProcessData:
+							emit_signal("entity_misc_process_data", json_message.payload)
+						Constants.GenericAction_EntityMiscOneOff:
+							emit_signal("entity_misc_one_off", json_message.payload)
+						Constants.GenericAction_EntityDeath:
+							emit_signal("entity_death", json_message.payload)
+						Constants.GenericAction_EntitySpawn:
+							emit_signal("entity_spawn", json_message.payload)
 			Constants.Action_GameStarted:
 				emit_signal("game_started")
 			Constants.Action_MapSelected:

@@ -1,7 +1,6 @@
 extends NetworkBody
 class_name NetworkPlatformerPlayer
 
-var bullet_reference = load("res://src/entities/bullet/Bullet.tscn")
 var muzzle_effect_reference = load("res://src/effects/MuzzleEffect.tscn")
 
 const WALL_JUMP_X_FORCE = 450.0
@@ -42,15 +41,12 @@ var can_shoot = true
 var cut_jump = false
 
 func _ready():
-	NetworkSocket.connect("shoot_bullet", self, "shoot_bullet")
-	NetworkSocket.connect("player_death", self, "player_death")
 	EventBus.emit_signal("player_health_update", health)
 	$CenterTrail.parent = self
 	$DashTrail.parent = self
 	$DashTrail2.parent = self
 
 func _physics_process(delta):
-	
 	if is_client_owner():
 		# hold jump to jump higher logic
 		if Input.is_action_just_released("jump") && !is_on_floor():
@@ -199,8 +195,8 @@ func _physics_process(delta):
 			elif movement_direction != Vector2.ZERO:
 				current_speed = SPEED
 			NetworkSocket.send_message_to_lobby({
-				"id": entity_uuid,
-				"type": Constants.GenericAction_EntityMiscData,
+				"entity_id": entity_uuid,
+				"type": Constants.GenericAction_EntityMiscProcessData,
 				"facing": $Sprites.scale.x,
 				"is_dashing": current_state == "Dashing"
 			})
@@ -232,7 +228,7 @@ func set_state(new_state):
 		
 		if is_client_owner():
 			NetworkSocket.send_message_to_lobby({
-				"id": entity_uuid,
+				"entity_id": entity_uuid,
 				"type": Constants.GenericAction_EntityUpdateState,
 				"state": current_state,
 			})
@@ -252,22 +248,35 @@ func hurt(damage):
 	EventBus.emit_signal("player_health_update", health)
 	if health == 0:
 		active = false
-		EventBus.emit_signal("player_death")
+		EventBus.emit_signal("entity_death", {
+			"type": Constants.GenericAction_EntityDeath,
+			"owner_id": owner_uuid,
+			"entity_id": entity_uuid,
+			"entity_type": Constants.EntityType_Player,
+		})
 		NetworkSocket.send_message_to_lobby({
-				"type": Constants.GenericAction_PlayerDeath,
-				"player_id": NetworkSocket.current_web_id
-			}
-		)
+			"type": Constants.GenericAction_EntityDeath,
+			"owner_id": owner_uuid,
+			"entity_id": entity_uuid,
+			"entity_type": Constants.EntityType_Player,
+		})
 		queue_free()
 
 func _on_Hitbox_area_entered(area):
-	if area is BulletPuppet:
-		hurt(area.damage)
+	var area_parent = area.get_parent()
+	if area_parent is NetworkBullet:
+		if is_client_owner():
+			if area_parent.owner_uuid != owner_uuid:
+				hurt(area_parent.damage)
+				area_parent.destroy_bullet()
+		else:
+			if area_parent.owner_uuid != owner_uuid:
+				area_parent.destroy_bullet(false)
 
 func shoot():
 	var starting_position = $Sprites/PlayerWeapon/BulletSpawn.global_position
 	var bullet_direction = (get_global_mouse_position() - starting_position).normalized()
-	EventBus.emit_signal("create_bullet", bullet_reference.instance(), starting_position + bullet_direction * 5, bullet_direction)
+	EventBus.emit_signal("create_bullet", Constants.BulletCategories_Regular, starting_position + bullet_direction * 5, bullet_direction)
 	var new_muzzle_effect = muzzle_effect_reference.instance()
 	new_muzzle_effect.rotation = bullet_direction.angle()
 	EventBus.emit_signal("create_effect", new_muzzle_effect, starting_position + bullet_direction * 5)
@@ -283,7 +292,7 @@ func set_dash_trails(value):
 
 func send_hard_update_position():
 	NetworkSocket.send_message_to_lobby({
-		"id": entity_uuid,
+		"entity_id": entity_uuid,
 		"type": Constants.GenericAction_EntityHardUpdatePosition,
 		"position": {
 			"x": global_position.x,
@@ -291,24 +300,23 @@ func send_hard_update_position():
 		},
 	})
 
-func entity_update_state(data):
-	if data.id == entity_uuid:
-		.entity_update_state(data)
+func remote_entity_update_state(data):
+	if data.entity_id == entity_uuid:
+		.remote_entity_update_state(data)
 		set_state(data.state)
 
-func entity_misc_data(data):
-	if data.id == entity_uuid:
-		.entity_misc_data(data)
+func remote_entity_misc_process_data(data):
+	if data.entity_id == entity_uuid:
+		.remote_entity_misc_process_data(data)
 		set_dash_trails(data.is_dashing)
 		$Sprites.scale.x = data.facing
+
+func remote_entity_misc_one_off(data):
+	if data.entity_id == entity_uuid:
+		.remote_entity_misc_one_off(data)
 
 func shoot_bullet(data):
 	if data.owner_id == owner_uuid:
 		$ShootSFX.stop()
 		$ShootSFX.pitch_scale = .8 + randf() * .3
 		$ShootSFX.play()
-
-func player_death(data):
-	if data.player_id == owner_uuid:
-		EventBus.emit_signal("opponent_death")
-		queue_free()
