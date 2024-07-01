@@ -6,6 +6,9 @@ func _ready():
 	NetworkSocket.connect("connection", self, "on_connection")
 	NetworkSocket.connect("web_socket_disconnected", self, "on_disconnection")
 	
+	NetworkSocket.connect("player_join", self, "player_join")
+	NetworkSocket.connect("player_left", self, "player_left")
+	NetworkSocket.connect("update_user_list", self, "update_user_list")
 	NetworkSocket.connect("update_lobby_list", self, "update_lobby_list")
 	NetworkSocket.connect("created_lobby", self, "created_lobby")
 	NetworkSocket.connect("joined_lobby", self, "joined_lobby")
@@ -29,6 +32,7 @@ func _on_Connect_pressed():
 
 func on_connection(success):
 	if success:
+		NetworkSocket.send_message_get_users()
 		$LoadingSection.hide()
 		$LobbySelectionSection.show()
 		NetworkSocket.send_message_get_lobbies()
@@ -91,6 +95,13 @@ func update_lobby_list(lobbies):
 			new_lobby_widget.connect("lobby_joined", self, "lobby_join_attempt")
 			$LobbySelectionSection/UI/ScrollLobbies/Lobbies.add_child(new_lobby_widget)
 
+func player_join(id, position, direction):
+	NetworkSocket.send_message_get_users()
+func player_left(webId):
+	NetworkSocket.send_message_get_users()
+func update_user_list(success, users):
+	if success:
+		$LobbySelectionSection/UI/PlayerNumber.text = str("Current players: ", users.size())
 
 func _on_LeaveLobby_pressed():
 	NetworkSocket.send_message_leave_lobby()

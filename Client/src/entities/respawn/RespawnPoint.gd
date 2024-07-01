@@ -11,5 +11,6 @@ func _on_Area2D_area_entered(area):
 		enemies.append(area_parent)
 
 func _on_Area2D_area_exited(area):
-	if enemies.has(area):
-		enemies.erase(area)
+	var area_parent = area.get_parent()
+	if area_parent is NetworkPlatformerPlayer && enemies.has(area_parent):
+		enemies.erase(area_parent)
