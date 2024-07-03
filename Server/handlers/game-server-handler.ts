@@ -1,9 +1,10 @@
 import { v4 } from "uuid";
 import { ClientSocket } from "../models/clientSocket";
 import { Lobby } from "../models/lobby";
-import ProtocolHelper from "./protocol-handler";
+import { ProtocolHelper } from "./protocol-handler";
+import { LoggerHelper } from "../helpers/logger-helper";
 
-export default class GameServerHandler {
+export class GameServerHandler {
   public connectedClients: ClientSocket[] = [];
   public lobbies: Lobby[] = [];
 
@@ -13,8 +14,8 @@ export default class GameServerHandler {
 
       ProtocolHelper.sendPlayerConnectionToAll(this, clientSocket);
     } catch (err: any) {
-      console.log(
-        `[GameServerHandler.addClient()] ERR: An error had occurred while adding a client: ${err}`
+      LoggerHelper.logError(
+        `[GameServerHandler.addClient()] An error had occurred while adding a client: ${err}`
       );
       throw err;
     }
@@ -31,9 +32,9 @@ export default class GameServerHandler {
               this.removeLobby(lobby.id);
 
               // Alert all clients the changes to the lobbies
-              this.connectedClients.forEach((el) =>
-                ProtocolHelper.sendLobbyList(this, el)
-              );
+              for (const client of this.connectedClients) {
+                ProtocolHelper.sendLobbyList(this, client);
+              }
             }
           }
         }
@@ -45,14 +46,14 @@ export default class GameServerHandler {
       if (clientIndex > -1) {
         this.connectedClients.splice(clientIndex, 1);
       } else {
-        console.log(
-          `[GameServerHandler.removeClient()] WARN: attempted to remove an inexistant client`
+        LoggerHelper.logWarn(
+          `[GameServerHandler.removeClient()] attempted to remove an inexistant client`
         );
       }
       ProtocolHelper.sendPlayerDisconnectToAll(this, clientId);
     } catch (err: any) {
-      console.log(
-        `[GameServerHandler.removeClient()] ERR: An error had occurred while removing a client: ${err}`
+      LoggerHelper.logError(
+        `[GameServerHandler.removeClient()] An error had occurred while removing a client: ${err}`
       );
       throw err;
     }
@@ -64,8 +65,8 @@ export default class GameServerHandler {
       this.lobbies.push(newLobby);
       return newLobby;
     } catch (err: any) {
-      console.log(
-        `[GameServerHandler.createLobby()] ERR: An error had occurred while creating a new lobby: ${err}`
+      LoggerHelper.logError(
+        `[GameServerHandler.createLobby()] An error had occurred while creating a new lobby: ${err}`
       );
       throw err;
     }
@@ -75,8 +76,8 @@ export default class GameServerHandler {
     try {
       return this.lobbies.find((el) => el.id === lobbyId);
     } catch (err: any) {
-      console.log(
-        `[GameServerHandler.getLobbyById()] ERR: An error had occurred while searching for a lobby by its id: ${err}`
+      LoggerHelper.logError(
+        `[GameServerHandler.getLobbyById()] An error had occurred while searching for a lobby by its id: ${err}`
       );
       throw err;
     }
@@ -88,8 +89,8 @@ export default class GameServerHandler {
         (el) => el.players.findIndex((player) => player.id === clientId) > -1
       );
     } catch (err: any) {
-      console.log(
-        `[GameServerHandler.getLobbyById()] ERR: An error had occurred while searching for a lobby by one of its player: ${err}`
+      LoggerHelper.logError(
+        `[GameServerHandler.getLobbyById()] An error had occurred while searching for a lobby by one of its player: ${err}`
       );
       throw err;
     }
@@ -106,8 +107,8 @@ export default class GameServerHandler {
         this.lobbies.splice(index, 1);
       }
     } catch (err: any) {
-      console.log(
-        `[GameServerHandler.removeLobby()] ERR: An error had occurred while removing a lobby: ${err}`
+      LoggerHelper.logError(
+        `[GameServerHandler.removeLobby()] An error had occurred while removing a lobby: ${err}`
       );
       throw err;
     }

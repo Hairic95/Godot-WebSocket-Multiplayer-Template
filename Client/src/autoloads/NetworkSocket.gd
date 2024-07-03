@@ -38,6 +38,13 @@ signal entity_misc_one_off(data)
 signal entity_death(data)
 signal entity_spawn(data)
 
+func _ready():
+	var new_timer = Timer.new()
+	add_child(new_timer)
+	new_timer.connect("timeout", self, "send_message_heartbeat")
+	new_timer.wait_time = 20
+	new_timer.start()
+
 func _process(_delta):
 	if _is_web_socket_connected() || _is_web_socket_connecting():
 		web_socket_client.poll()
@@ -138,6 +145,10 @@ func send_message_leave_lobby():
 func send_message_to_lobby(messageContent):
 	if _is_web_socket_connected():
 		_send_message(Constants.Action_MessageToLobby, messageContent)
+
+func send_message_heartbeat():
+	if _is_web_socket_connected():
+		_send_message(Constants.Action_Heartbeat, {})
 
 func parse_message_received(json_message):
 	if json_message.has("action") && json_message.has("payload"):

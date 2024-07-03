@@ -96,7 +96,8 @@ func update_lobby_list(lobbies):
 			$LobbySelectionSection/UI/ScrollLobbies/Lobbies.add_child(new_lobby_widget)
 
 func player_join(id, position, direction):
-	NetworkSocket.send_message_get_users()
+	pass
+	#NetworkSocket.send_message_get_users()
 func player_left(webId):
 	NetworkSocket.send_message_get_users()
 func update_user_list(success, users):

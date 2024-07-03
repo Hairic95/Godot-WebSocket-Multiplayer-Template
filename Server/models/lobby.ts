@@ -3,6 +3,7 @@ import { EAction } from "../base/enumerators";
 import { ClientSocket } from "./clientSocket";
 import { LobbyClient } from "./lobbyClient";
 import { Message } from "./message";
+import { LoggerHelper } from "../helpers/logger-helper";
 
 export class Lobby {
   players: ClientSocket[];
@@ -14,7 +15,9 @@ export class Lobby {
       this.players = players;
       this.id = id;
     } catch (err) {
-      console.log(`An error had occurred while creating the Lobby: ${err}`);
+      LoggerHelper.logError(
+        `An error had occurred while creating the Lobby: ${err}`
+      );
     }
   }
 
@@ -33,7 +36,7 @@ export class Lobby {
 
       return true;
     } catch (err) {
-      console.log(
+      LoggerHelper.logError(
         `An error had occurred while adding a new player to the Lobby: ${err}`
       );
     }
@@ -53,7 +56,7 @@ export class Lobby {
         el.socket.send(playerLeftMessage.toString())
       );
     } catch (err) {
-      console.log(
+      LoggerHelper.logError(
         `An error had occurred while removing a player from the Lobby: ${err}`
       );
     }
@@ -67,6 +70,10 @@ export class Lobby {
           (el) => new LobbyClient(el.id, el.username, el.position, el.direction)
         ),
       };
-    } catch (error) {}
+    } catch (err) {
+      LoggerHelper.logError(
+        `An error had occurred while getting the lobby: ${err}`
+      );
+    }
   };
 }

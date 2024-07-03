@@ -4,10 +4,11 @@ import { ClientSocket } from "../models/clientSocket";
 import { Lobby } from "../models/lobby";
 import { Message } from "../models/message";
 
-import GameServerHandler from "./game-server-handler";
-import Constants from "../base/constants";
+import { GameServerHandler } from "./game-server-handler";
+import { Constants } from "../base/constants";
+import { LoggerHelper } from "../helpers/logger-helper";
 
-export default class ProtocolHelper {
+export class ProtocolHelper {
   public static sendPlayerDisconnectToAll = (
     gameServer: GameServerHandler,
     playerDisconnectedId: String
@@ -16,14 +17,18 @@ export default class ProtocolHelper {
       webId: playerDisconnectedId,
     });
     try {
-      gameServer.connectedClients.forEach((el) => {
+      for (const client of gameServer.connectedClients) {
         try {
-          el.socket.send(playerDisconnectedMessage.toString());
-        } catch (err: any) {}
-      });
+          client.socket.send(playerDisconnectedMessage.toString());
+        } catch (err: any) {
+          LoggerHelper.logError(
+            `[ProtocolHelper.sendPlayerDisconnectToAll()] An error had occurred while sending message to client ${client.id}. \n Error: ${err}`
+          );
+        }
+      }
     } catch (err: any) {
-      console.log(
-        `ERR: An error had occurred while notifing a server disconnection: ${err}`
+      LoggerHelper.logError(
+        `[ProtocolHelper.sendPlayerDisconnectToAll()] An error had occurred while notifing a server disconnection: ${err}`
       );
     }
   };
@@ -39,16 +44,20 @@ export default class ProtocolHelper {
       direction: playerClient.direction,
     });
     try {
-      gameServer.connectedClients.forEach((el) => {
+      for (const client of gameServer.connectedClients) {
         try {
-          if (el.id != playerClient.id) {
-            el.socket.send(playerConnectedMessage.toString());
+          if (client.id != playerClient.id) {
+            client.socket.send(playerConnectedMessage.toString());
           }
-        } catch (err: any) {}
-      });
+        } catch (err: any) {
+          LoggerHelper.logError(
+            `[ProtocolHelper.sendPlayerConnectionToAll()] An error had occurred while sending message to client ${client.id}. \n Error: ${err}`
+          );
+        }
+      }
     } catch (err: any) {
-      console.log(
-        `ERR: An error had occurred while notifing a server disconnection: ${err}`
+      LoggerHelper.logError(
+        `[ProtocolHelper.sendPlayerConnectionToAll()] An error had occurred while notifing a server disconnection: ${err}`
       );
     }
   };
@@ -81,12 +90,17 @@ export default class ProtocolHelper {
         case EAction.JoinLobby:
           ProtocolHelper.joinExistingLobby(gameServer, clientSocket, message);
           break;
+        case EAction.Heartbeat:
+          ProtocolHelper.processHeartbeat(gameServer, clientSocket);
+          break;
         case EAction.MessageToLobby:
           ProtocolHelper.sendMessageToLobby(gameServer, clientSocket, message);
           break;
       }
     } catch (err) {
-      console.log(`ERR: An error had occurred while parsing a message: ${err}`);
+      LoggerHelper.logError(
+        `[ProtocolHelper.parseReceivingMessage()] An error had occurred while parsing a message: ${err}`
+      );
     }
   };
 
@@ -96,11 +110,11 @@ export default class ProtocolHelper {
     message: Message
   ) => {
     try {
-      console.log("Connection attempt...");
+      LoggerHelper.logInfo("Connection attempt...");
       if (message.payload.secretKey === Constants.SecretKey) {
         clearTimeout(clientSocket.logoutTimeout);
         clientSocket.username = message.payload.username;
-        console.log(`Connection confirmed for ${clientSocket.id}`);
+        LoggerHelper.logInfo(`Connection confirmed for ${clientSocket.id}`);
 
         // Send response
         const connectMessage: Message = new Message(EAction.Connect, {
@@ -110,19 +124,18 @@ export default class ProtocolHelper {
         clientSocket.socket.send(connectMessage.toString());
 
         // Notifies other clients
-        gameServer.connectedClients.forEach((el) => {
-          if (el !== clientSocket) {
-            ProtocolHelper.sendUserList(gameServer, clientSocket);
-          }
-        });
+        for (const client of gameServer.connectedClients) {
+          ProtocolHelper.sendUserList(gameServer, client);
+        }
       } else {
+        LoggerHelper.logWarn(`Connection failed for ${clientSocket.id}`);
         clearTimeout(clientSocket.logoutTimeout);
         clientSocket.socket.close();
         return false;
       }
     } catch (err: any) {
-      console.log(
-        `[ProtocolHelper.connectToServer()] ERR: An error had occurred while parsing a message: ${err}`
+      LoggerHelper.logError(
+        `[ProtocolHelper.connectToServer()] An error had occurred while parsing a message: ${err}`
       );
     }
   };
@@ -145,8 +158,8 @@ export default class ProtocolHelper {
       });
       clientSocket.socket.send(userListMessage.toString());
     } catch (err: any) {
-      console.log(
-        `[ProtocolHelper.sendUserList()] ERR: An error had occurred while parsing a message: ${err}`
+      LoggerHelper.logError(
+        `[ProtocolHelper.sendUserList()] An error had occurred while parsing a message: ${err}`
       );
     }
   };
@@ -162,8 +175,8 @@ export default class ProtocolHelper {
       });
       clientSocket.socket.send(lobbyListMessage.toString());
     } catch (err: any) {
-      console.log(
-        `[ProtocolHelper.sendLobbies()] ERR: An error had occurred while parsing a message: ${err}`
+      LoggerHelper.logError(
+        `[ProtocolHelper.sendLobbies()] An error had occurred while parsing a message: ${err}`
       );
     }
   };
@@ -181,8 +194,8 @@ export default class ProtocolHelper {
         clientSocket.socket.send(message.toString());
       }
     } catch (err: any) {
-      console.log(
-        `[ProtocolHelper.sendLobby()] ERR: An error had occurred while parsing a message: ${err}`
+      LoggerHelper.logError(
+        `[ProtocolHelper.sendLobby()] An error had occurred while parsing a message: ${err}`
       );
     }
   };
@@ -193,8 +206,8 @@ export default class ProtocolHelper {
   ) => {
     try {
       if (gameServer.getLobbyByPlayerId(clientSocket.id)) {
-        console.log(
-          `WARN: Client ${clientSocket.id} is requesting a new lobby while inside a lobby.`
+        LoggerHelper.logWarn(
+          `Client ${clientSocket.id} is requesting a new lobby while inside a lobby.`
         );
         const invalidLobbyMessage = new Message(EAction.CreateLobby, {
           success: false,
@@ -202,6 +215,7 @@ export default class ProtocolHelper {
         clientSocket.socket.send(invalidLobbyMessage.toString());
         return false;
       } else {
+        LoggerHelper.logInfo(`Client ${clientSocket.id} created a new lobby.`);
         const newLobby = gameServer.createLobby();
         newLobby.addPlayer(clientSocket);
 
@@ -215,8 +229,8 @@ export default class ProtocolHelper {
         });
       }
     } catch (err: any) {
-      console.log(
-        `[ProtocolHelper.createNewLobby()] ERR: An error had occurred while parsing a message: ${err}`
+      LoggerHelper.logError(
+        `[ProtocolHelper.createNewLobby()] An error had occurred while parsing a message: ${err}`
       );
     }
   };
@@ -253,8 +267,8 @@ export default class ProtocolHelper {
         );
       }
     } catch (err: any) {
-      console.log(
-        `[ProtocolHelper.leaveLobby()] ERR: An error had occurred while parsing a message: ${err}`
+      LoggerHelper.logError(
+        `[ProtocolHelper.leaveLobby()] An error had occurred while parsing a message: ${err}`
       );
     }
   };
@@ -299,8 +313,8 @@ export default class ProtocolHelper {
         clientSocket.socket.send(joinLobbyFailureMessage.toString());
       }
     } catch (err: any) {
-      console.log(
-        `[ProtocolHelper.joinExistingLobby()] ERR: An error had occurred while parsing a message: ${err}`
+      LoggerHelper.logError(
+        `[ProtocolHelper.joinExistingLobby()] An error had occurred while parsing a message: ${err}`
       );
     }
   };
@@ -310,12 +324,17 @@ export default class ProtocolHelper {
       const lobbyListMessage: Message = new Message(EAction.GameStarted, {});
       clientSocket.socket.send(lobbyListMessage.toString());
     } catch (err: any) {
-      console.log(
-        `[ProtocolHelper.sendGameStarted()] ERR: An error had occurred while parsing a message: ${err}`
+      LoggerHelper.logError(
+        `[ProtocolHelper.sendGameStarted()] An error had occurred while parsing a message: ${err}`
       );
     }
   }
 
+  /**
+   *
+   * @param clientSocket
+   * @param lobbyToJoin
+   */
   public static sendLobbyChanged(
     clientSocket: ClientSocket,
     lobbyToJoin: Lobby
@@ -326,12 +345,32 @@ export default class ProtocolHelper {
       });
       clientSocket.socket.send(lobbyListMessage.toString());
     } catch (err: any) {
-      console.log(
-        `[ProtocolHelper.sendLobbyChanged()] ERR: An error had occurred while parsing a message: ${err}`
+      LoggerHelper.logError(
+        `[ProtocolHelper.sendLobbyChanged()] An error had occurred while parsing a message: ${err}`
       );
     }
   }
 
+  /**
+   *
+   * @param gameServer
+   * @param clientSocket
+   */
+  private static processHeartbeat = (gameServer, clientSocket) => {
+    try {
+    } catch (err: any) {
+      LoggerHelper.logError(
+        `[ProtocolHelper.processHeartbeat()] An error had occurred while parsing a message: ${err}`
+      );
+    }
+  };
+
+  /**
+   *
+   * @param gameServer
+   * @param clientSocket
+   * @param message
+   */
   private static sendMessageToLobby = (
     gameServer: GameServerHandler,
     clientSocket: ClientSocket,
@@ -351,8 +390,8 @@ export default class ProtocolHelper {
         });
       }
     } catch (err: any) {
-      console.log(
-        `[ProtocolHelper.sendMessageToLobby()] ERR: An error had occurred while parsing a message: ${err}`
+      LoggerHelper.logError(
+        `[ProtocolHelper.sendMessageToLobby()] An error had occurred while parsing a message: ${err}`
       );
     }
   };

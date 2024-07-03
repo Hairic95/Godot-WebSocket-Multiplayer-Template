@@ -1,5 +1,6 @@
 import WebSocket = require("ws");
 import { Vector2 } from "./vector2";
+import { LoggerHelper } from "../helpers/logger-helper";
 
 export class ClientSocket {
   username: String;
@@ -22,11 +23,11 @@ export class ClientSocket {
       this.direction = direction;
 
       this.logoutTimeout = setTimeout(() => {
-        console.log(`Closing socket ${this.id}. No validation.`);
+        LoggerHelper.logWarn(`Closing socket ${this.id}. No validation.`);
         this.socket.close();
       }, 4 * 1000);
     } catch (err) {
-      console.log(
+      LoggerHelper.logError(
         `An error had occurred while creating the Client Socket: ${err}`
       );
     }

@@ -15,6 +15,7 @@ export enum EAction {
   GameStarted = "GameStarted",
 
   MessageToLobby = "MessageToLobby",
+  Heartbeat = "Heartbeat",
 }
 
 export enum EGenericAction {

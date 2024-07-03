@@ -35,7 +35,7 @@ margin_top = 174.0
 margin_right = 116.0
 margin_bottom = 188.0
 custom_fonts/font = SubResource( 6 )
-text = "V.ALPHA 2"
+text = "V.ALPHA 3"
 valign = 1
 
 [node name="LoginSection" type="CanvasLayer" parent="."]

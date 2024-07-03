@@ -1,5 +1,6 @@
 import WebSocket = require("ws");
 import { Vector2 } from "./vector2";
+import { LoggerHelper } from "../helpers/logger-helper";
 
 export class LobbyClient {
   username: String;
@@ -19,7 +20,7 @@ export class LobbyClient {
       this.position = position;
       this.direction = direction;
     } catch (err) {
-      console.log(
+      LoggerHelper.logError(
         `An error had occurred while creating the Client Socket: ${err}`
       );
     }

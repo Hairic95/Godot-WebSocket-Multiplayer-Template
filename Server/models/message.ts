@@ -1,4 +1,5 @@
 import { EAction } from "../base/enumerators";
+import { LoggerHelper } from "../helpers/logger-helper";
 
 export class Message {
   action: EAction;
@@ -9,7 +10,9 @@ export class Message {
       this.action = action;
       this.payload = payload;
     } catch (err) {
-      console.log(`An error had occurred while creating a message: ${err}`);
+      LoggerHelper.logError(
+        `An error had occurred while creating a message: ${err}`
+      );
     }
   }
 
@@ -21,7 +24,9 @@ export class Message {
       }
       throw "Invalid message";
     } catch (err) {
-      console.log(`An error had occurred while creating a message: ${err}`);
+      LoggerHelper.logError(
+        `An error had occurred while creating a message: ${err}`
+      );
       return null;
     }
   }
@@ -34,7 +39,9 @@ export class Message {
       };
       return JSON.stringify(array);
     } catch (err) {
-      console.log(`An error had occurred while parsing the message: ${err}`);
+      LoggerHelper.logError(
+        `An error had occurred while parsing the message: ${err}`
+      );
     }
   }
 }

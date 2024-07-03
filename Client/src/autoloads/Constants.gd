@@ -26,6 +26,7 @@ const Action_MapSelected = "MapSelected"
 const Action_GameStarted = "GameStarted"
 
 const Action_MessageToLobby = "MessageToLobby"
+const Action_Heartbeat = "Heartbeat"
 
 # GENERIC MESSAGES
 
